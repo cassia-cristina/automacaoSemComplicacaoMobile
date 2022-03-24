@@ -5,5 +5,3 @@
 
 
 ##### + Projeto feito durante o curso de Automação Mobile utilizando Appium/Java.
-
-##### + Teste unitário.
