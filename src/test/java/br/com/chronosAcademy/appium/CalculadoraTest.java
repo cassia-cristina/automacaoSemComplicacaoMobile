@@ -1,71 +1,55 @@
 package br.com.chronosAcademy.appium;
 
-import io.appium.java_client.MobileBy;
+import br.com.chronosAcademy.appium.calculator.Calculadora;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class CalculadoraTest {
     public DriverFactory driverFactory;
+    Map<String, String> map;
+    Calculadora calculadora;
 
     @BeforeEach
     public void inicializaDriver() throws MalformedURLException {
         driverFactory = new DriverFactory();
-        driverFactory.setCapabilities("Android","CassiaDevice","uiautomator2",
-                "com.android.calculator2","com.android.calculator2.Calculator");
+        map = new HashMap<>();
+        map.put("platform", "Android");
+        map.put("device", "emulator:5554");
+        map.put("automation", "uiautomator2");
+        map.put("appPackage", "com.android.calculator2");
+        map.put("appActivity", "com.android.calculator2.Calculator");
+        driverFactory.setCapabilities(map);
         driverFactory.setDriver();
+        calculadora = new Calculadora(driverFactory);
     }
 
     @Test
-    public void validarMultiplicacao() throws MalformedURLException {
-        click("digit_7");
-        click("op_mul");
-        click("digit_9");
-        click("eq");
-        String resultado = getText("result");
-        assertEquals("63",resultado);
+    public void validaMultiplicacao() {
+        assertEquals(63, calculadora.multiplicacao());
     }
 
     @Test
-    public void validarSoma(){
-        click("digit_7");
-        click("op_add");
-        click("digit_9");
-        click("eq");
-        String resultado = getText("result");
-        assertEquals("16",resultado);
+    public void validaSoma(){
+        assertEquals(16, calculadora.soma());
     }
 
     @Test
-    public void validarSubtracao(){
-        click("digit_9");
-        click("op_sub");
-        click("digit_7");
-        click("eq");
-        String resultado = getText("result");
-        assertEquals("2",resultado);
+    public void validaSubtracao(){
+        assertEquals(2, calculadora.subtracao());
     }
 
     @Test
-    public void validarDivisao(){
-        click("digit_1");
-        click("digit_0");
-        click("digit_0");
-        click("op_div");
-        click("digit_2");
-        click("eq");
-        String resultado = getText("result");
-        assertEquals("50",resultado);
+    public void validaDivisao(){
+       assertEquals(50, calculadora.divisao());
     }
-
-    public void click(String id){
-        driverFactory.getDriver().findElement(MobileBy.id(id)).click();
-    }
-    public String getText(String id) { return driverFactory.getDriver().findElement(MobileBy.id(id)).getText(); }
 
     @AfterEach
     public void finalizarConexao(){
